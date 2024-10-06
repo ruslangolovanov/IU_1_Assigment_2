@@ -9,12 +9,21 @@ struct Student {
     char name[100];
     char faculty[100];
 };
+//enum ExamType {
+//     WRITTEN,
+//     DIGITAL
+// };
 
 struct Exam {
     int exam_ID;
-    char exam_type[100];
-    char exam_info[100];
-
+    enum ExamType {
+        WRITTEN,
+        DIGITAL
+    }type;
+    union ExamInfo {
+        int duration;
+        char software[100];
+    }info;
 };
 
 struct ExamGrade {
@@ -23,10 +32,10 @@ struct ExamGrade {
     int grade;
 };
 
-union ExamInfo {
-    int duration;
-    char software[100];
-};
+// union ExamInfo {
+//     int duration;
+//     char software[100];
+// };
 
 int contains_digit(const char *str) {
     while (*str) {
@@ -54,8 +63,9 @@ int contains_char(const char *str) {
 #define MAX_RECORDS 100
 
 struct Student database_student[MAX_RECORDS];
+struct Exam database_exam[MAX_RECORDS];
 int record_count = 0;
-
+int record_count2 = 0;
 
 void ADD_STUDENT(int id, const char* name,  const char* faculty) {
     if (record_count < MAX_RECORDS) {
@@ -70,18 +80,24 @@ void ADD_STUDENT(int id, const char* name,  const char* faculty) {
     }
 }
 
-//void ADD_EXAM(int id, const char* name,  const char* faculty) {
-//     if (record_count < MAX_RECORDS) {
-//         database[record_count].student_ID = id;
-//         strncpy(database[record_count].name, name, MAX_NAME_LENGTH - 1);
-//         database[record_count].name[MAX_NAME_LENGTH - 1] = '\0'; // защита от переполнения
-//         strncpy(database[record_count].faculty, faculty, MAX_NAME_LENGTH - 1);
-//         database[record_count].faculty[MAX_NAME_LENGTH - 1] = '\0'; // защита от переполнения
-//         record_count++;
-//     } else {
-//         printf("База данных полна.\n");
-//     }
-// }
+void ADD_EXAM(int id, const char* type, int duration, char* name) {
+     if (record_count < MAX_RECORDS) {
+         database_exam[record_count].exam_ID = id;
+         database_exam[record_count].type, type, MAX_NAME_LENGTH - 1;
+
+         if (type == WRITTEN) {
+             database_exam[record_count].info.duration = duration;
+         }else {
+             database_exam[record_count].info.software, name, MAX_NAME_LENGTH - 1;
+         }
+
+         record_count2++;
+     } else {
+         printf("База данных полна.\n");
+     }
+ }
+
+
 struct Person* find_person(int id) {
     for (int i = 0; i < record_count; i++) {  // Проходим по всем записям
         if (database_student[i].student_ID == id) {  // Если найдено совпадение по ID
@@ -106,7 +122,7 @@ void delete_person(int id) {
 }
 void print_database() {
     for (int i = 0; i < record_count; i++) {  // Проходим по всем записям
-        printf("ID: %d, Name: %s, Age: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
+        printf("ID: %d, Name: %s, faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
     }
 }
 
@@ -162,12 +178,25 @@ int main(void) {
                 }else {
                     fprintf(fileout, "Student: %d already exists\n", atoi(arr_a[1]));
                 }
+            }else if(strcmp(arr_a[0], "ADD_EXAM\n") ){
+                if (strcmp(arr_a[2], "WRITTEN\n")) {
+                    ADD_EXAM(atoi(arr_a[1]), arr_a[2], atoi(arr_a[3]), NULL);
+                    fprintf(fileout, "Exam: %d added\n", atoi(arr_a[1]));
+                }else if(strcmp(arr_a[2], "DIGITAL\n") ){
+                    ADD_EXAM(atoi(arr_a[1]), arr_a[2], NULL, arr_a[3]);
+                    fprintf(fileout, "Exam: %d added\n", atoi(arr_a[1]));
+                }else {
+                    fprintf(fileout, "Invalid exam type\n");
+                }
+
             }
 
-        }
+            }
 
 
 
+
+        print_database();
 
 
         fclose(file);
