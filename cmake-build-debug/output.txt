@@ -1,0 +1,8 @@
+Student: 101 added
+Student: 102 added
+Student: 103 added
+Student: 104 added
+Student: 105 added
+Student: 105 already exists
+Student: 106 added
+Invalid name

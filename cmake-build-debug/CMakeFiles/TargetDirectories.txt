@@ -1,0 +1,3 @@
+C:/Ruslan/Introduction to Programming/Assigments/Assigment_2/cmake-build-debug/CMakeFiles/Assigment_2.dir
+C:/Ruslan/Introduction to Programming/Assigments/Assigment_2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Ruslan/Introduction to Programming/Assigments/Assigment_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
