@@ -6,3 +6,9 @@ ADD_STUDENT 105 Mosab InformationTechnology
 ADD_STUDENT 105 Mosab InformationTechnology
 ADD_STUDENT 106 Rawan ProgrammingLangugaesAndCompilers
 ADD_STUDENT 107 Mo3ab InformationTechnology
+ADD_EXAM 20 WRITTEN 90
+ADD_EXAM 202 DIGITAL Python
+ADD_EXAM 203 WRITTEN 120
+ADD_EXAM 204 DIGITAL MATLAB
+ADD_EXAM 205 DIGITAL VisualStudio
+ADD_EXAM 205 DIGITAL VisualStudio
