@@ -133,6 +133,16 @@ struct Exam* find_exam(int id) {
     return NULL;  // Если запись не найдена, возвращаем NULL
 }
 
+struct Student* SearchStudent(int id) {
+    for (int i = 0; i < record_count; i++) {  // Проходим по всем записям
+        if (database_student[i].student_ID == id) {  // Если найдено совпадение по ID
+            printf("ID: %d, Name: %s, faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
+            return &database_student[i];  // Возвращаем указатель на найденную запись
+        }
+    }
+    return NULL;
+}
+
 void delete_person(int id) {
     for (int i = 0; i < record_count; i++) {  // Ищем запись по ID
         if (database_student[i].student_ID == id) {  // Если найдено
@@ -310,6 +320,7 @@ int main(void) {
     }
 
 
+SearchStudent(101);
     //print_Grades_database();
         fclose(file);
         fclose(fileout);
