@@ -64,8 +64,11 @@ int contains_char(const char *str) {
 
 struct Student database_student[MAX_RECORDS];
 struct Exam database_exam[MAX_RECORDS];
+struct ExamGrade database_grade[MAX_RECORDS];
+
 int record_count = 0;
 int record_count2 = 0;
+int record_count3 = 0;
 
 void ADD_STUDENT(int id, const char* name,  const char* faculty) {
     if (record_count < MAX_RECORDS) {
@@ -96,6 +99,20 @@ void ADD_EXAM(int id, const char* type, int duration, char* name) {
          printf("База данных полна.\n");
      }
  }
+
+
+void ADD_Grade(int exam_id, int student_id, int grade) {
+    if (record_count2 < MAX_RECORDS) {
+        database_grade[record_count3].exam_ID = exam_id;
+        database_grade[record_count3].student_ID = student_id;
+        database_grade[record_count3].grade = grade;
+
+        record_count3++;
+    } else {
+        printf("База данных полна.\n");
+    }
+}
+
 
 
 struct Student* find_person(int id) {
@@ -129,11 +146,19 @@ void delete_person(int id) {
     }
     printf("Запись с id %d не найдена.\n", id);  // Сообщаем, если запись не найдена
 }
+
 void print_Student_database() {
     for (int i = 0; i < record_count; i++) {  // Проходим по всем записям
         printf("ID: %d, Name: %s, faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
     }
 }
+
+void print_Grades_database() {
+    for (int i = 0; i < record_count3; i++) {  // Проходим по всем записям
+        printf("exaam_ID: %d, student_id: %d, grade: %d\n", database_grade[i].exam_ID, database_grade[i].student_ID, database_grade[i].grade);
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // void print_Exam_database() {
 //     for (int i = 0; i < record_count2; i++) {  // Проходим по всем записям
@@ -157,7 +182,7 @@ int main(void) {
     char ch;
 
     while (fgets(current_command, sizeof(current_command), file)) {
-        current_command[strlen(current_command) - 1] = '\0';
+        //current_command[strlen(current_command) - 1] = '\0';
         char *arr_a[4];
         int i = 0;
 
@@ -165,93 +190,129 @@ int main(void) {
         char *token2 = strtok(current_command, " ");
 
         // Save each substring to the 'arr_s' array
-            while (token2 != NULL) {
-                arr_a[i] = token2;
-                i++;
-                token2 = strtok(NULL, " ");
-            }
-// if (strcmp(arr_a[0], "ADD_EXAM\n")) {
-//     printf("%s t\n", arr_a[0]);
-// }else {
-//     printf("%s f\n", arr_a[0]);
-// }
-        //printf("%d", strcmp(arr_a[0], "ADD_STUDENT"));
+        while (token2 != NULL) {
+            arr_a[i] = token2;
+            i++;
+            token2 = strtok(NULL, " ");
+        }
+
+
+
         printf("%s\n", arr_a[0]);
-            if(strcmp(arr_a[0], "ADD_STUDENT") == 0) {
-                if (find_person(atoi(arr_a[1])) == NULL) {
-                    if (contains_digit(arr_a[2]) == 0){
-                        if (contains_digit(arr_a[3]) == 0) {
-                            if (contains_char(arr_a[1]) == 0) {
+        if(strcmp(arr_a[0], "ADD_STUDENT") == 0) {
+            if (find_person(atoi(arr_a[1])) == NULL) {
+                if ((contains_digit(arr_a[2]) == 0) && (strlen(arr_a[2])  <=  20)){
+                    if ((contains_digit(arr_a[3]) == 0) && (4 <= strlen(arr_a[3])  <=  30)) {
+                        if ((contains_char(arr_a[1]) == 0) && (0 <= atoi(arr_a[1]) <= 1000)) {
 
-                                ADD_STUDENT(atoi(arr_a[1]), arr_a[2], arr_a[3]);
-                                fprintf(fileout, "Student: %d added\n", atoi(arr_a[1]));
+                            ADD_STUDENT(atoi(arr_a[1]), arr_a[2], arr_a[3]);
+                            fprintf(fileout, "Student: %d added\n", atoi(arr_a[1]));
 
-                             }else {
-                                 fprintf(fileout, "Invalid id\n");
-                            }
+                        }else {
+                            fprintf(fileout, "Invalid id\n");
+                        }
                     }else {
                         fprintf(fileout, "Invalid faculty\n");
                     }
-                    }else {
-                        fprintf(fileout, "Invalid name\n");
-                    }
                 }else {
-                    fprintf(fileout, "Student: %d already exists\n", atoi(arr_a[1]));
+                    fprintf(fileout, "Invalid name\n");
                 }
-
-
-            }else if(strcmp(arr_a[0], "ADD_EXAM") == 0 ){
-                if (find_exam(atoi(arr_a[1])) == NULL) {
-
-                    if (strcmp(arr_a[2], "WRITTEN") == 0) {
-                        if (contains_char(arr_a[1]) == 0) {
-                            if (contains_char(arr_a[3]) == 0) {
-                                ADD_EXAM(atoi(arr_a[1]), arr_a[2], atoi(arr_a[3]), NULL);
-                                fprintf(fileout, "Exam: %d added\n", atoi(arr_a[1]));
-                            }else {
-                                fprintf(fileout, "Invalid info\n");
-                            }
-                        }else {
-                            fprintf(fileout, "Invalid id\n");
-                        }
-
-
-                    }else if(strcmp(arr_a[2], "DIGITAL") == 0 ){
-                        if (contains_char(arr_a[1]) == 0) {
-                            if (contains_digit(arr_a[3]) == 0) {
-                                ADD_EXAM(atoi(arr_a[1]), arr_a[2], NULL, arr_a[3]);
-                                fprintf(fileout, "Exam: %d added\n", atoi(arr_a[1]));
-                            }else {
-                                fprintf(fileout, "Invalid info\n");
-                            }
-                        }else {
-                            fprintf(fileout, "Invalid id\n");
-                        }
-
-
-
-
-
-
-                    }else {
-                        fprintf(fileout, "Invalid exam type\n");
-                    }
-                }else {
-                    fprintf(fileout, "Exam: %d already exists\n", atoi(arr_a[1]));
-                }
-
-
-
-            }
-
+            }else {
+                fprintf(fileout, "Student: %d already exists\n", atoi(arr_a[1]));
             }
 
 
-        print_Student_database();
+        }else if(strcmp(arr_a[0], "ADD_EXAM") == 0 ){
+            if (find_exam(atoi(arr_a[1])) == NULL) {
+
+                if (strcmp(arr_a[2], "WRITTEN") == 0) {
+                    if ((contains_char(arr_a[1]) == 0) && (0 <= atoi(arr_a[1]) <= 500)) {
+                        if ((contains_char(arr_a[3]) == 0) && (40 <= atoi(arr_a[1]) <= 180)) {
+                            ADD_EXAM(atoi(arr_a[1]), arr_a[2], atoi(arr_a[3]), NULL);
+                            fprintf(fileout, "Exam: %d added\n", atoi(arr_a[1]));
+                        }else {
+                            fprintf(fileout, "Invalid info\n");
+                        }
+                    }else {
+                        fprintf(fileout, "Invalid id\n");
+                    }
+
+
+                }else if(strcmp(arr_a[2], "DIGITAL") == 0 ){
+                    if ((contains_char(arr_a[1]) == 0 )&& (0 <= atoi(arr_a[1]) <= 500)) {
+                        if ((contains_digit(arr_a[3]) == 0) &&( 2 <= strlen(arr_a[3])  <=  20) ){
+                            ADD_EXAM(atoi(arr_a[1]), arr_a[2], NULL, arr_a[3]);
+                            fprintf(fileout, "Exam: %d added\n", atoi(arr_a[1]));
+                        }else {
+                            fprintf(fileout, "Invalid info\n");
+                        }
+                    }else {
+                        fprintf(fileout, "Invalid id\n");
+                    }
+
+                }else {
+                    fprintf(fileout, "Invalid exam type\n");
+                }
+            }else {
+                fprintf(fileout, "Exam: %d already exists\n", atoi(arr_a[1]));
+            }
+
+
+
+        }else if(strcmp(arr_a[0], "ADD_GRADE") == 0) {
+
+
+
+                    if ((contains_char(arr_a[1]) == 0) && (0 <= atoi(arr_a[1]) <= 500))  {
+                        if ((contains_char(arr_a[2]) == 0) && (0 <= atoi(arr_a[2]) <= 1000))  {
+                            if ((contains_char(arr_a[3]) == 0) && (atoi(arr_a[3]) <= 100) && (atoi(arr_a[3]) >= 0)) {
+                                printf("grade %d, inchar %d \n", atoi(arr_a[3]), contains_char(arr_a[3]));
+                                // if ((atoi(arr_a[3]) >= 100) || ((contains_char(arr_a[3]) == 0))) {
+                                //     printf("neok\n");
+                                // }else {
+                                //     printf("ok\n");
+                                // }
+                                if(find_exam(atoi(arr_a[1])) != NULL) {
+                                    if (find_person(atoi(arr_a[2])) != NULL) {
+
+
+                                        ADD_Grade(atoi(arr_a[1]), atoi(arr_a[2]), atoi(arr_a[3]));
+                                        fprintf(fileout, "Grade: %d added for the student: %d\n", atoi(arr_a[3]), atoi(arr_a[1]));
+
+                                    }else{
+
+                                        fprintf(fileout, "Student not found\n");
+                                    }
+                                }else {
+                                    fprintf(fileout, "Exam not found\n");
+                                }
+
+                            }else {
+                                fprintf(fileout, "Invalid grade\n");
+                            }
+
+                        }else {
+                            fprintf(fileout, "Invalid student id\n");
+                        }
+
+                    }else {
+                        fprintf(fileout, "Invalid exam id\n");
+                    }
+
+
+
+        }
+
+
+        //print_Student_database();
         //print_Exam_database();
 
+    }
 
+
+    //print_Grades_database();
         fclose(file);
         fclose(fileout);
         return 0;
- }
+
+}

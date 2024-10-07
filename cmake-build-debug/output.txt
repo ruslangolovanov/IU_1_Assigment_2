@@ -6,9 +6,20 @@ Student: 105 added
 Student: 105 already exists
 Student: 106 added
 Invalid name
-Exam: 20 added
+Exam: 201 added
 Exam: 202 added
-Invalid info
+Exam: 203 added
 Exam: 204 added
 Exam: 205 added
 Exam: 205 already exists
+Grade: 85 added for the student: 201
+Grade: 90 added for the student: 202
+Grade: 78 added for the student: 203
+Grade: 88 added for the student: 204
+Grade: 92 added for the student: 201
+Grade: 95 added for the student: 202
+Grade: 80 added for the student: 203
+Grade: 85 added for the student: 204
+Grade: 75 added for the student: 201
+Grade: 80 added for the student: 202
+Invalid grade
