@@ -23,3 +23,5 @@ Grade: 85 added for the student: 204
 Grade: 75 added for the student: 201
 Grade: 80 added for the student: 202
 Invalid grade
+ID: 101, Name: Munir, faculty: SoftwareEngineering
+Exam: 201, Student: 101, Name: Munir, Grade: 85, Type: WRITTEN, Info: 90
