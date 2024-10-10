@@ -23,14 +23,16 @@ Grade 85 added for the student: 104
 Grade 75 added for the student: 105
 Grade 80 added for the student: 105
 Invalid grade
-Grade 0 added for the student: 0
-Grade 1 added for the student: 101
-Invalid student id
-Invalid student id
-Grade 95 added for the student: 101
+ID: 101, Name: Munir, Faculty: SoftwareEngineering
+Exam: 201, Student: 101, Name: Munir, Grade: 85, Type: WRITTEN, Info: 90
+Exam: 202 updated
+Invalid exam type
+Grade 95 updated for the student: 101
 Invalid grade
-Invalid grade
-Grade 0 added for the student: 105
-Invalid exam id
-Invalid exam id
-Invalid exam id
+Student: 105 deleted
+Student not found
+ID: 101, Name: Munir, Faculty: SoftwareEngineering
+ID: 102, Name: Marko, Faculty: ComputerScience
+ID: 103, Name: Alaa, Faculty: DataScience
+ID: 104, Name: Mahmoud, Faculty: CyberSecurity
+
