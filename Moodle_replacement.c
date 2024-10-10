@@ -74,9 +74,9 @@ void ADD_STUDENT(int id, const char* name,  const char* faculty) {
     if (record_count_students < MAX_RECORDS) {
         database_student[record_count_students].student_ID = id;
         strncpy(database_student[record_count_students].name, name, MAX_NAME_LENGTH - 1);
-        database_student[record_count_students].name[MAX_NAME_LENGTH - 1] = '\0'; // защита от переполнения
+        //database_student[record_count_students].name[MAX_NAME_LENGTH - 1] = '\0'; // защита от переполнения
         strncpy(database_student[record_count_students].faculty, faculty, MAX_NAME_LENGTH - 1);
-        database_student[record_count_students].faculty[MAX_NAME_LENGTH - 1] = '\0'; // защита от переполнения
+        //database_student[record_count_students].faculty[MAX_NAME_LENGTH - 1] = '\0'; // защита от переполнения
         record_count_students++;
     } else {
         printf("База данных полна.\n");
@@ -141,8 +141,7 @@ struct Exam* find_exam(int id) {
 struct Student* SearchStudent(int id, FILE *fileout) {
     for (int i = 0; i < record_count_students; i++) {  // Проходим по всем записям
         if (database_student[i].student_ID == id) {  // Если найдено совпадение по ID
-            printf("ID: %d, Name: %s, faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
-            fprintf(fileout, "ID: %d, Name: %s, faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
+            fprintf(fileout, "ID: %d, Name: %s, Faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
             return &database_student[i];  // Возвращаем указатель на найденную запись
         }
     }
@@ -175,6 +174,37 @@ struct Student* SearchGrade(int id_student, int id_exam, FILE *fileout) {
     return NULL;
 }
 
+
+void UPDATE_EXAM(int id, const char* type, int duration, char* name) {
+
+    if (record_count_exam < MAX_RECORDS) {
+
+        if (strcmp(type,"WRITTEN") == 0) {
+            database_exam[id].info.duration = duration;
+            database_exam[id].type =  WRITTEN;
+        }else if(strcmp(type,"DIGITAL") == 0){
+            strcpy(database_exam[id].info.software, name);
+            database_exam[id].type =  DIGITAL;
+        }
+    } else {
+        printf("База данных полна.\n");
+    }
+}
+
+
+void UPDATE_GRADE(int exam_id ,int student_id, int grade) {
+    for (int i = 0; i < record_count_grade; i++) {
+        if (database_grade[i].exam_ID == exam_id && database_grade[i].student_ID == student_id) {
+            database_grade[i].grade = grade;
+        }
+
+
+
+    }
+}
+
+
+
 void delete_person(int id) {
     for (int i = 0; i < record_count_students; i++) {  // Ищем запись по ID
         if (database_student[i].student_ID == id) {  // Если найдено
@@ -182,24 +212,40 @@ void delete_person(int id) {
                 database_student[j] = database_student[j + 1];
             }
             record_count_students--;  // Уменьшаем счетчик записей
-            printf("Запись удалена.\n");
-            return;
+
+            break;
         }
     }
-    printf("Запись с id %d не найдена.\n", id);  // Сообщаем, если запись не найдена
+    for(int i = 0; i < record_count_grade; i++) {
+        if (database_grade[i].student_ID == id) {
+            for (int j = i; j < record_count_grade - 1; j++) {  // Сдвигаем все последующие записи на одно место назад
+                database_grade[j] = database_grade[j + 1];
+            }
+            record_count_grade --;
+        }
+    }
+
 }
 
-void print_Student_database() {
-    for (int i = 0; i < record_count_students; i++) {  // Проходим по всем записям
-        printf("ID: %d, Name: %s, faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
-    }
-}
+    void print_Student_database(FILE *fileout) {
 
-void print_Grades_database() {
-    for (int i = 0; i < record_count_grade; i++) {  // Проходим по всем записям
-        printf("exaam_ID: %d, student_id: %d, grade: %d\n", database_grade[i].exam_ID, database_grade[i].student_ID, database_grade[i].grade);
+        for (int i = 0; i < record_count_students; i++) {  // Проходим по всем записям
+            if (database_student[i].faculty[strlen(database_student[i].faculty) - 1] == '\n') {
+                database_student[i].faculty[strlen(database_student[i].faculty) - 1] = '\0';
+
+            }
+
+            fprintf(fileout, "ID: %d, Name: %s, Faculty: %s\n", database_student[i].student_ID, database_student[i].name, database_student[i].faculty);
+        }
     }
-}
+
+
+
+// void print_Grades_database() {
+//     for (int i = 0; i < record_count_grade; i++) {  // Проходим по всем записям
+//         printf("exaam_ID: %d, student_id: %d, grade: %d\n", database_grade[i].exam_ID, database_grade[i].student_ID, database_grade[i].grade);
+//     }
+// }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // void print_Exam_database() {
@@ -244,8 +290,9 @@ int main(void) {
         if(strcmp(arr_a[0], "ADD_STUDENT") == 0) {
             if (find_person(atoi(arr_a[1])) == NULL) {
                 if ((contains_digit(arr_a[2]) == 0) && (strlen(arr_a[2])  <=  20)){
-                    if ((contains_digit(arr_a[3]) == 0) && (4 <= strlen(arr_a[3])  <=  30)) {
-                        if ((contains_char(arr_a[1]) == 0) && (0 <= atoi(arr_a[1]) <= 1000)) {
+                    if ((contains_digit(arr_a[3]) == 0) && (4 <= strlen(arr_a[3])) && ( strlen(arr_a[3]) <=  30)) {
+                        printf("%s %d\n", arr_a[3], strlen(arr_a[3]));
+                        if ((contains_char(arr_a[1]) == 0) && (0 <= atoi(arr_a[1]) ) && (atoi(arr_a[1])<= 1000)) {
 
                             ADD_STUDENT(atoi(arr_a[1]), arr_a[2], arr_a[3]);
                             fprintf(fileout, "Student: %d added\n", atoi(arr_a[1]));
@@ -314,7 +361,7 @@ int main(void) {
 
 
                                         ADD_Grade(atoi(arr_a[1]), atoi(arr_a[2]), atoi(arr_a[3]));
-                                        fprintf(fileout, "Grade: %d added for the student: %d\n", atoi(arr_a[3]), atoi(arr_a[1]));
+                                        fprintf(fileout, "Grade %d added for the student: %d\n", atoi(arr_a[3]), atoi(arr_a[2]));
 
                                     }else{
 
@@ -371,6 +418,45 @@ int main(void) {
                 fprintf(fileout, "Invalid student id\n");
             }
 
+        }else if(strcmp(arr_a[0], "UPDATE_EXAM") == 0) {
+            //UPDATE_EXAM 202 DIGITAL Eclipse
+            //UPDATE_EXAM 202 WRITTEN 120
+            if (strcmp(arr_a[2], "WRITTEN") == 0 ) {
+                if((contains_char(arr_a[3]) == 0) && (40 <= atoi(arr_a[1]) <= 180)) {
+                    UPDATE_EXAM(atoi(arr_a[1]), arr_a[2], atoi(arr_a[3]), NULL );
+                    fprintf(fileout, "Exam: %d updated\n", atoi(arr_a[1]));
+
+                }else {
+                    fprintf(fileout, "Invalid duration\n");
+                }
+
+            }else if((strcmp(arr_a[2], "DIGITAL") == 0)){
+                if((contains_digit(arr_a[3]) == 0) &&( 2 <= strlen(arr_a[3])  <=  20)) {
+                    UPDATE_EXAM(atoi(arr_a[1]), arr_a[2], NULL, arr_a[3]) ;
+                    fprintf(fileout, "Exam: %d updated\n", atoi(arr_a[1]));
+                }else {
+                    fprintf(fileout, "Invalid software\n");
+                }
+
+
+            }else {
+                fprintf(fileout, "Invalid exam type\n");
+            }
+        }else if(strcmp(arr_a[0], "UPDATE_GRADE") == 0) {
+            if((contains_char(arr_a[3]) == 0) && (atoi(arr_a[3]) <= 100) && (atoi(arr_a[3]) >= 0)) {
+                UPDATE_GRADE(atoi(arr_a[1]), atoi(arr_a[2]), atoi(arr_a[3]));
+                fprintf(fileout, "Grade %d updated for the student: %d\n", atoi(arr_a[3]), atoi(arr_a[2]));
+
+            }else {
+                fprintf(fileout, "Invalid grade\n");
+            }
+        }else if(strcmp(arr_a[0], "LIST_ALL_STUDENTS") == 0) {
+            print_Student_database(fileout);
+        }else if(strcmp(arr_a[0], "DELETE_STUDENT") == 0) {
+            delete_person(atoi(arr_a[1]));
+            fprintf(fileout, "Student: %d deleted\n", atoi(arr_a[1]));
+        }else if(strcmp(arr_a[0], "DELETE_STUDENT") == 0) {
+            break;
         }
 
 
@@ -379,7 +465,8 @@ int main(void) {
 
     }
 
-
+//delete_person(101);
+    //print_Student_database(fileout);
 
     //print_Grades_database();
         fclose(file);

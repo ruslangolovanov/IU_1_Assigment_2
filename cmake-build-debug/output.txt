@@ -4,7 +4,7 @@ Student: 103 added
 Student: 104 added
 Student: 105 added
 Student: 105 already exists
-Student: 106 added
+Invalid faculty
 Invalid name
 Exam: 201 added
 Exam: 202 added
@@ -12,16 +12,26 @@ Exam: 203 added
 Exam: 204 added
 Exam: 205 added
 Exam: 205 already exists
-Grade: 85 added for the student: 201
-Grade: 90 added for the student: 202
-Grade: 78 added for the student: 203
-Grade: 88 added for the student: 204
-Grade: 92 added for the student: 201
-Grade: 95 added for the student: 202
-Grade: 80 added for the student: 203
-Grade: 85 added for the student: 204
-Grade: 75 added for the student: 201
-Grade: 80 added for the student: 202
+Grade 85 added for the student: 101
+Grade 90 added for the student: 101
+Grade 78 added for the student: 102
+Grade 88 added for the student: 102
+Grade 92 added for the student: 103
+Grade 95 added for the student: 103
+Grade 80 added for the student: 104
+Grade 85 added for the student: 104
+Grade 75 added for the student: 105
+Grade 80 added for the student: 105
 Invalid grade
-ID: 101, Name: Munir, faculty: SoftwareEngineering
+ID: 101, Name: Munir, Faculty: SoftwareEngineering
 Exam: 201, Student: 101, Name: Munir, Grade: 85, Type: WRITTEN, Info: 90
+Exam: 202 updated
+Invalid exam type
+Grade 95 updated for the student: 101
+Invalid grade
+Student: 105 deleted
+Student not found
+ID: 101, Name: Munir, Faculty: SoftwareEngineering
+ID: 102, Name: Marko, Faculty: ComputerScience
+ID: 103, Name: Alaa, Faculty: DataScience
+ID: 104, Name: Mahmoud, Faculty: CyberSecurity
